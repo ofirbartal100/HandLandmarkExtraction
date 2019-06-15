@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" autoUpload="Always" serverName="ofirbartal@132.67.246.116:6004" autoUploadExternalChanges="true">
+    <serverData>
+      <paths name="ofirbartal@132.67.246.116:22">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="ofirbartal@132.67.246.116:22 (2)">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="ofirbartal@132.67.246.116:6004">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/ofirbartal/Projects/GaneratedHands_Preprocess" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
+  </component>
+</project>
