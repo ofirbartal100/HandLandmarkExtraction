@@ -1,13 +1,12 @@
 import random
 
 import torchvision
-from src.HandsJointsDataset import *
+from HandsJointsDataset import *
 
 # logging.basicConfig(filename='training_resnet101.log', level=logging.INFO)
 
 images_path = r"/disk1/ofirbartal/datasets/GANeratedHands/GaneratedHands_Preprocess/" + "preprocessed_images/"
-csv_path_clean = r"/disk1/ofirbartal/datasets/GANeratedHands/GaneratedHands_Preprocess/" + 'raw_dataframes_clean.csv'
-csv_path_clean_front_hands = r"/disk1/ofirbartal/datasets/GANeratedHands/GaneratedHands_Preprocess/" + 'raw_dataframes_clean_fromt_hand.csv'
+csv_path_clean_front_hands = r"data/" + 'raw_dataframes_clean_fromt_hand.csv'
 
 in_transform = Compose([
     CropToBoundry(),
@@ -20,8 +19,8 @@ transformed_dataset = HandsJointsDataset(csv_path_clean, images_path, in_transfo
 
 # define the model
 # save_model_name = 'trained_models/resnet101_03_06_2019_model.pt'
-# save_model_name = 'trained_models/resnet50_model_only_front_hand.pt'
-save_model_name = 'trained_models/resnet50_02_06_2019_model.pt'
+save_model_name = 'models/resnet50_model_only_front_hand.pt'
+# save_model_name = 'trained_models/resnet50_02_06_2019_model.pt'
 # model = torchvision.models.resnet101()
 model = torchvision.models.resnet50()
 
@@ -30,9 +29,9 @@ model.avgpool = torch.nn.AvgPool2d(2)
 model.fc = torch.nn.Linear(2048, 42)
 
 criterion = torch.nn.MSELoss()
-optimizer = torch.optim.SGD(model.parameters(), lr=0.005)
+optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
 
-general_model = GeneralModelRemoteServer(model, criterion, optimizer, save_model_name, transformed_dataset,to_log=False)
+general_model = GeneralModelRemoteServer(model, criterion, optimizer, save_model_name, transformed_dataset,to_log=True)
 
 general_model.fit(n_epochs=20)
 
@@ -64,5 +63,3 @@ def test_the_model(num_images=1):
 
 
 test_the_model(100)
-
-#up to date
