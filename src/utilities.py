@@ -125,7 +125,7 @@ def im_convert_fromGRAY(tensor):
 
     return image
 
-
+#
 def show_landmarks(image, landmarks):
     """Show image with landmarks"""
     # plt.imshow(image,cmap='gray')

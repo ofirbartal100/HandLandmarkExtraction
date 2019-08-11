@@ -1,6 +1,6 @@
 import torchvision
 from HandsJointsDataset import *
-
+#
 images_path = r"/disk1/ofirbartal/datasets/GANeratedHands/GaneratedHands_Preprocess/" + "preprocessed_images/"
 csv_path_clean = r"/disk1/ofirbartal/datasets/GANeratedHands/GaneratedHands_Preprocess/" + 'raw_dataframes_clean.csv'
 

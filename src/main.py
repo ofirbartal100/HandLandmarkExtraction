@@ -15,7 +15,7 @@ in_transform = Compose([
     Normalize((0.485,), (0.229,))
 ])
 
-transformed_dataset = HandsJointsDataset(csv_path_clean, images_path, in_transform)
+# transformed_dataset = HandsJointsDataset(csv_path_clean, images_path, in_transform)
 
 # define the model
 # save_model_name = 'trained_models/resnet101_03_06_2019_model.pt'
@@ -27,13 +27,13 @@ model = torchvision.models.resnet50()
 model.conv1 = torch.nn.Conv2d(1, 64, (7, 7), (2, 2), (3, 3))
 model.avgpool = torch.nn.AvgPool2d(2)
 model.fc = torch.nn.Linear(2048, 42)
+#
+# criterion = torch.nn.MSELoss()
+# optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
 
-criterion = torch.nn.MSELoss()
-optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
+# general_model = GeneralModelRemoteServer(model, criterion, optimizer, save_model_name, transformed_dataset,to_log=True)
 
-general_model = GeneralModelRemoteServer(model, criterion, optimizer, save_model_name, transformed_dataset,to_log=True)
-
-general_model.fit(n_epochs=20)
+# general_model.fit(n_epochs=20)
 
 
 def test_the_model(num_images=1):
@@ -62,4 +62,23 @@ def test_the_model(num_images=1):
         plt.savefig(directory+'result{0}.jpg'.format(n))
 
 
-test_the_model(100)
+model.load_state_dict(torch.load(self.save_model_name))
+
+
+print("cool")
+# test_the_model(100)
+
+# From Silhouette Extraction Project
+# import processedImage
+#
+# plotter = processedImage.ProcessedImagePlotter()
+#
+# image_num = [57, 100, 200, 600, 8000, 2547, 6004]
+# p_images = [processedImage.ProcessedImage(i) for i in image_num]
+#
+# transforms = [
+#     processedImage.SteeredEdgeTransform(3, 40, False),
+#     processedImage.CannyTransform(100, 200, True)
+# ]
+
+# plotter.plot_multy_grid(p_images, transforms)
