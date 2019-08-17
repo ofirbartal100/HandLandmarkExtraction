@@ -5,17 +5,19 @@ from PIL import Image
 from torch.utils.data import DataLoader, SubsetRandomSampler
 from torch.utils.data import Dataset
 from .input_handler import *
+from .dataset_transforms import *
 
 
 class GaneratedHandsDataset(Dataset):
     """Ganerated Hands's images labeled with joints lanmarks dataset."""
 
-    def __init__(self, labels_csv_path, images_root_directory_path):
+    def __init__(self, transform, labels_csv_path, images_root_directory_path):
         """
         Args:
             labels_csv_path (string): Path to the csv file with annotations.
             images_root_directory_path (string): Directory with all the images.
         """
+        self.transform = transform
         self.labels = pd.read_csv(labels_csv_path)
         self.root_dir = images_root_directory_path
 
@@ -37,13 +39,13 @@ class GaneratedHandsDataset(Dataset):
         label = np.array(record[1:], dtype='float')
         label = label.reshape(-1, 2)
 
-        return image, label
+        return self.transform(image, label)
 
 
 class GaneratedHandsDatabase():
 
-    def __init__(self, labels_csv_path, images_root_directory_path, batch_size=64):
-        self.dataset = GaneratedHandsDataset(labels_csv_path, images_root_directory_path)
+    def __init__(self, transform, labels_csv_path, images_root_directory_path, batch_size=64):
+        self.dataset = GaneratedHandsDataset(transform, labels_csv_path, images_root_directory_path)
 
         # create samplers for the loaders
         train_sampler, valid_sampler, test_sampler = self._data_samplers(self.dataset)
@@ -77,5 +79,15 @@ class DataBaseInputHandler(InputHandler):
         return the dataset loaders
         :param args: labels_csv_path, images_root_directory_path, *batch_size = 64
         """
-        db = GaneratedHandsDatabase(*args)
-        return (db.train_loader,db.valid_loader,db.test_loader)
+
+        # this transform was used during the first training, we crop image to boundry of hand,
+        # than rescale it to 64x64, than transform to tensor, and finally normalize
+        transform = Compose([
+            CropToBoundry(),
+            Rescale((64, 64)),
+            ToTensor(),
+            Normalize((0.485,), (0.229,))
+        ])
+
+        db = GaneratedHandsDatabase(transform, *args)
+        return (db.train_loader, db.valid_loader, db.test_loader)
